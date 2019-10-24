@@ -1,0 +1,4 @@
+This is the changelog:
+
+2019-10-24: Created github repository and added essential files such as 
+			project information, data and code. 

@@ -1,4 +1,6 @@
 This is the changelog:
 
 2019-10-24: Created github repository and added essential files such as 
-			project information, data and code. 
+project information, data and code. /Jonathan P
+
+2019-11-04: Added the first version of function "tempOnDay". /Jonathan P

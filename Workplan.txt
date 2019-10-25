@@ -1,1 +1,14 @@
 This is the workplan:
+
+Everything will be done through github. All team-members should work on a function free of choice. 
+
+
+Team-members and there respective function:
+
+Jonathan P - Creating a function that gives information about the temperature for a specific day. 
+
+Andreas - A function that gives the average temperatur for each day during a year. 
+
+Martin - 
+
+Jonathan W - 

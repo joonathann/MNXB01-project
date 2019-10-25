@@ -2,9 +2,11 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 #include <TH1.h>
 #include <TCanvas.h>
+#include <TLegend.h>
 
 #include "tempTrender.h"
 
@@ -31,6 +33,7 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	
 	// if and else statements for adding each line to vector
 	if(myFile.is_open()) {
+		cout << "Reading datafile..." << endl;
 		while(getline(myFile, helpString)) { 
 			vecStrings.push_back(helpString); 
 		}
@@ -44,13 +47,14 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	// removing the first elements in the vector since they contain text and not data
 	vecStrings.erase(vecStrings.begin(), vecStrings.begin() + 12);
 	
-	// creating new file
-	ofstream tempFile("tempFile.txt");
-	
 	// removing text in the first lines of data
 	for(int n=0; n < 12; n++) {
 		vecStrings[n] = vecStrings[n].substr(0, 25);
 	}
+	
+	// creating new file
+	ofstream tempFile("tempFile.txt");
+	cout << "Creating new file with only month-day and respective temperature for that day..." << endl;
 	
 	// adding only date and temperature to the new textfile
 	int vs = vecStrings.size();
@@ -72,6 +76,7 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	
 	// open the file "tempfile.txt"
 	ifstream file("tempFile.txt");
+	cout << "Reading new file and creating histogram..." << endl;
 	
 	// while-loop that finds correct data for month and day
 	int monthNo = 0;
@@ -82,9 +87,6 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	while(file >> monthNo >> dayNo >> temperature) {
 		if(monthNo == month) {
 			if(dayNo == day) {
-				cout << "month: " << monthNo << endl;
-				cout << "day: " << dayNo << endl;
-				cout << "temp: " << temperature << endl;
 				vecTemp.push_back(temperature);
 			}
 		}
@@ -99,7 +101,26 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	for(int m=0; m < vecTempSize; m=m+3) {
 		histogram->Fill((vecTemp[m]+vecTemp[m+1]+vecTemp[m+2])/3);
 	}
-	TCanvas* canvas = new TCanvas();
+	double meanTemp = histogram->GetMean(); // mean value for the temperature of the day
+	double stdevTemp = histogram->GetRMS(); // standard deviation of the temperature
+	TCanvas* canvas = new TCanvas("tempOnDay", "tempOnDay");
 	histogram->Draw();
+	
+	TLegend* leg = new TLegend(0.71, 0.86, 0.95, 0.95);
+	
+	stringstream dString;
+	stringstream mString;
+	dString << day;
+	mString << month;
+	string dayString = dString.str();
+	string monthString = mString.str();
+	
+	string label = "Temperature on " + dayString + "/" + monthString;
+	
+	leg->AddEntry(histogram, label.c_str(), "F");
+	leg->Draw();
+	
+	cout << "Mean value for the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << meanTemp << endl;
+	cout << "Standard deviation of the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << stdevTemp << endl;
 	
 }

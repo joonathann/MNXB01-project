@@ -16,7 +16,7 @@ void project() {
 	//cout << endl;
 	tempTrender t(pathToFile); //Instantiate your analysis object
 	
-	t.tempOnDay(12, 24, -5);
+	t.tempOnDay(12, 24, -2);
 	
 }
 

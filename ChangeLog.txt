@@ -7,3 +7,5 @@ project information, data and code. /Jonathan P
 
 2019-11-05: Updated the function "tempOnDay". Added the feature that
 the probability for a specific temperature is given. /Jonathan P
+
+2019-11-07: Final update of "tempOnDay". /Jonathan P

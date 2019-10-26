@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <TH1.h>
+#include <TF1.h>
 #include <TCanvas.h>
 #include <TLegend.h>
 
@@ -100,9 +101,10 @@ int tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate, double expT
 	TH1I* histogram = new TH1I("temperature", "Temperature;Temperature[#circC];Entries", 300, -20, 40);
 	histogram->SetFillColor(kRed +1);
 	int vecTempSize = vecTemp.size();
-	for(int m=0; m < vecTempSize; m=m+3) {
-		histogram->Fill((vecTemp[m]+vecTemp[m+1]+vecTemp[m+2])/3);
+	for(int m=0; m < vecTempSize; m=m+1) { 
+		histogram->Fill(vecTemp[m]); 
 	}
+	
 	double meanTemp = histogram->GetMean(); // mean value for the temperature of the day
 	double stdevTemp = histogram->GetRMS(); // standard deviation of the temperature
 	double integralOfHist = histogram->Integral();

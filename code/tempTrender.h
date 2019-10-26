@@ -13,7 +13,7 @@ class tempTrender {
 	private:
 		string dataFile;
 		
-		// for tempOnDay
+		int year;
 		int month;
 		int day;
 		double yourTemp;
@@ -25,6 +25,9 @@ class tempTrender {
 		
 		// Jonathan P - Function that gives a histogram for the temperature for a given day. 
 		int tempOnDay(int monthToCalculate, int dayToCalculate, double expTemp);
+		
+		// Andreas - Function that gives the mean temp and a histogram for the temperature for a given date. 
+		void MeanTempAndTempOnDate(int yearToCalculate, int monthToCalculate, int dayToCalculate);
 		
 };
 

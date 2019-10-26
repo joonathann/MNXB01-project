@@ -18,6 +18,8 @@ void project() {
 	
 	t.tempOnDay(12, 24, -2);
 	
+	t.MeanTempAndTempOnDate(1998, 1, 1);
+	
 }
 
 

@@ -21,21 +21,3 @@ void project() {
 	t.MeanTempAndTempOnDate(1998, 1, 1);
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-// This was included in the file, just leaving it down here for now...
-
-//t.tempOnDay(8, 23); //Call some functions that you've implemented
-//t.tempOnDay(235);
-//t.tempPerDay();
-//t.hotCold();
-//t.tempPerYear(2050);

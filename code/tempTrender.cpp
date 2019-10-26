@@ -127,7 +127,7 @@ int tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate, double expT
 	
 	cout << "Mean value for the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << meanTemp << endl;
 	cout << "Standard deviation of the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << stdevTemp << endl;
-	cout << "Probability for your expected temperature: " << probTemp*100 << "%" << endl;
+	cout << "Probability for your expected temperature (" << yourTemp << " degree Celsius): " << probTemp*100 << "%" << endl;
 	
 	return 0;
 }

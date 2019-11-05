@@ -11,7 +11,7 @@ void project() {
 	string pathToFile = "/home/courseuser/MNXB01-project/datasets/smhi-opendata_Lund.csv"; //Put the path to your data file here
 	tempTrender t(pathToFile); //Instantiate your analysis object
 	
-	t.tempOnDay(10, 10);
+	t.tempOnDay(12, 24);
 	
 }
 

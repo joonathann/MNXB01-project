@@ -13,18 +13,19 @@
 using namespace std;
 
 tempTrender::tempTrender(string filePath) {
-	cout << "The user supplied " << filePath << " as the path to the data file." << endl;
+	cout << "The user supplied " << filePath << " as the path to the data file." << endl << endl;
 	dataFile=filePath;
 }
 
 tempTrender::~tempTrender() {}
 
 // Jonathan - Function that gives a histogram for the temperature for a given day.
-void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
+int tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate, double expTemp) {
 	
 	// member variables
 	month=monthToCalculate;
 	day=dayToCalculate;
+	yourTemp=expTemp;
 	
 	string helpString; // used for adding each line to a vector
 	vector <string> vecStrings; // vector that we will add each line to
@@ -40,6 +41,7 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	}
 	else {
 		cout << "Error: not reading the file!" << endl;
+		return 1;
 	}
 	
 	myFile.close(); // closing the file
@@ -54,7 +56,7 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	
 	// creating new file
 	ofstream tempFile("tempFile.txt");
-	cout << "Creating new file with only month-day and respective temperature for that day..." << endl;
+	cout << "Creating new file with only month, day and temperature..." << endl;
 	
 	// adding only date and temperature to the new textfile
 	int vs = vecStrings.size();
@@ -76,7 +78,7 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	
 	// open the file "tempfile.txt"
 	ifstream file("tempFile.txt");
-	cout << "Reading new file and creating histogram..." << endl;
+	cout << "Reading new file and creating histogram..." << endl << endl;
 	
 	// while-loop that finds correct data for month and day
 	int monthNo = 0;
@@ -103,24 +105,29 @@ void tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate) {
 	}
 	double meanTemp = histogram->GetMean(); // mean value for the temperature of the day
 	double stdevTemp = histogram->GetRMS(); // standard deviation of the temperature
+	double integralOfHist = histogram->Integral();
+	double binx = histogram->FindBin(yourTemp);
+	double integralOfTemp = histogram->Integral(binx-0.5, binx+0.5);
+	double probTemp = integralOfTemp/integralOfHist;
+	
 	TCanvas* canvas = new TCanvas("tempOnDay", "tempOnDay");
 	histogram->Draw();
 	
+	// making a legend
 	TLegend* leg = new TLegend(0.71, 0.86, 0.95, 0.95);
-	
 	stringstream dString;
 	stringstream mString;
 	dString << day;
 	mString << month;
 	string dayString = dString.str();
 	string monthString = mString.str();
-	
 	string label = "Temperature on " + dayString + "/" + monthString;
-	
 	leg->AddEntry(histogram, label.c_str(), "F");
 	leg->Draw();
 	
 	cout << "Mean value for the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << meanTemp << endl;
 	cout << "Standard deviation of the temperature at " << day << "/" << month << " in Lund from 1961 to 2015: " << stdevTemp << endl;
+	cout << "Probability for your expected temperature (" << yourTemp << " degree Celsius): " << probTemp*100 << "%" << endl;
 	
+	return 0;
 }

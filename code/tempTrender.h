@@ -16,6 +16,7 @@ class tempTrender {
 		// for tempOnDay
 		int month;
 		int day;
+		double yourTemp;
 		
 	
 	public:
@@ -23,7 +24,7 @@ class tempTrender {
 		~tempTrender(); //Destructor
 		
 		// Jonathan P - Function that gives a histogram for the temperature for a given day. 
-		void tempOnDay(int monthToCalculate, int dayToCalculate);
+		int tempOnDay(int monthToCalculate, int dayToCalculate, double expTemp);
 		
 };
 

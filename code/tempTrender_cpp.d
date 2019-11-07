@@ -27,6 +27,12 @@
 ./tempTrender_cpp.so: /usr/include/root/TVectorFfwd.h
 ./tempTrender_cpp.so: /usr/include/root/TVectorDfwd.h
 ./tempTrender_cpp.so: /usr/include/root/TFitResultPtr.h
+./tempTrender_cpp.so: /usr/include/root/TF1.h /usr/include/root/TFormula.h
+./tempTrender_cpp.so: /usr/include/root/TBits.h /usr/include/root/TObjArray.h
+./tempTrender_cpp.so: /usr/include/root/TSeqCollection.h
+./tempTrender_cpp.so: /usr/include/root/TCollection.h
+./tempTrender_cpp.so: /usr/include/root/TIterator.h
+./tempTrender_cpp.so: /usr/include/root/Math/ParamFunctor.h
 ./tempTrender_cpp.so: /usr/include/root/TCanvas.h /usr/include/root/TPad.h
 ./tempTrender_cpp.so: /usr/include/root/TVirtualPad.h
 ./tempTrender_cpp.so: /usr/include/root/TAttPad.h

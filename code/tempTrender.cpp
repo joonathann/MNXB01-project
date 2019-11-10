@@ -133,3 +133,120 @@ int tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate, double expT
 	
 	return 0;
 }
+
+
+// Andreas - Function that gives the mean temp and a histogram for the temperature for a given date.
+void tempTrender::MeanTempAndTempOnDate(int yearToCalculate, int monthToCalculate, int dayToCalculate) {
+	
+	// member variables
+	year=yearToCalculate;
+	month=monthToCalculate;
+	day=dayToCalculate;
+	
+	string helpString; // used for adding each line to a vector
+	vector <string> vecStrings; // vector that we will add each line to
+	
+	ifstream myFile(dataFile.c_str()); // open file
+	
+	// if and else statements for adding each line to vector
+	if(myFile.is_open()) {
+		while(getline(myFile, helpString)) { 
+			vecStrings.push_back(helpString); 
+		}
+	}
+	else {
+		cout << "Error: not reading the file!" << endl;
+	}
+	
+	myFile.close(); // closing the file
+	
+	// removing the first elements in the vector since they contain text and not data
+	vecStrings.erase(vecStrings.begin(), vecStrings.begin() + 12);
+	
+	// creating new file
+	ofstream tempFile("tempFile.txt");
+	
+	// removing text in the first lines of data
+	for(int n=0; n < 12; n++) {
+		vecStrings[n] = vecStrings[n].substr(0, 25);
+	}
+	
+	// adding only date and temperature to the new textfile
+	int vs = vecStrings.size();
+	int stringLength = 0;
+	int endofstring = 0;
+	string date0;
+	string date1;
+	string date2;
+	string temp;
+	for(int i=0; i < vs; i++) {
+		stringLength = vecStrings[i].length();
+		endofstring = stringLength - 22;
+		date0 = vecStrings[i].substr(0, 4);
+		date1 = vecStrings[i].substr(5, 2);
+		date2 = vecStrings[i].substr(8, 2);
+		temp = vecStrings[i].substr(20, endofstring);
+		tempFile << date0 << " " << date1 << " " << date2 << " " << temp << endl;
+	}
+	
+	tempFile.close(); // closing file
+	
+	// open the file "tempfile.txt"
+	ifstream file("tempFile.txt");
+	
+	// while-loop that finds correct data for month and day
+	int yearNo = 0;
+	int monthNo = 0;
+	int dayNo = 0;
+	double temperature = 0.;
+	vector <double> vecTemp;
+	
+	while(file >> yearNo >> monthNo >> dayNo >> temperature) {
+		if(yearNo == year) {
+			if(monthNo == month) {
+				if(dayNo == day) {
+					cout  << temperature << endl; 
+					vecTemp.push_back(temperature);
+				}
+			}
+		}
+	}
+	
+	
+	int L = 0;
+	L = vecTemp.size();
+	
+	cout << "Length : " << L << endl;
+	
+	
+	double mean;
+	double tot = 0;
+	
+	
+	for(int i=0; i < L; i++) {
+		
+		tot = tot + vecTemp[i];	
+	}
+	
+	
+	cout << "Total : " << tot << endl;
+	
+	mean = tot/L;
+	
+	cout << "Mean : " << mean << endl;
+	
+	
+	file.close();
+	
+	// creating the histogram
+	TH1I* histogram = new TH1I("temperature", "Temperature;Temperature[#circC];Entries", 300, -20, 40);  
+	histogram->SetFillColor(kRed +1);
+	double vecTempSize = vecTemp.size();
+	for(int m=0; m < vecTempSize; m++) {
+		histogram->Fill(vecTemp[m]);
+	}
+	TCanvas* canvas = new TCanvas();
+	histogram->Draw();
+	
+}
+

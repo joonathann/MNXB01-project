@@ -24,4 +24,8 @@ void project() {
 	
 	cout << endl << endl << "MinMax:" << endl << endl;
 	t.MinMax();
+	
+	cout << endl << endl << "YearlyAverages:" << endl << endl;
+	t.YearlyAverages();
+	
 }

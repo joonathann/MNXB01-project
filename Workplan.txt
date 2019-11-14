@@ -9,6 +9,6 @@ Jonathan P - Creating a function that gives information about the temperature fo
 
 Andreas - A function that gives the average temperatur for each day during a year. 
 
-Martin - 
+Martin - Minimum and maximum temperature of each year. 
 
-Jonathan W - 
+Jonathan W - Function that gives average temperature for each year. 

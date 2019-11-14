@@ -14,7 +14,7 @@
 using namespace std;
 
 tempTrender::tempTrender(string filePath) {
-	cout << "The user supplied " << filePath << " as the path to the data file." << endl << endl;
+	cout << "The user supplied " << filePath << " as the path to the data file." << endl;
 	dataFile=filePath;
 }
 

@@ -33,6 +33,9 @@ class tempTrender {
 		int TempFile();
 		int MinMax();
 		
+		// Jonathan W
+		int YearlyAverages();
+		
 };
 
 #endif

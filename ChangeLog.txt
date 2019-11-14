@@ -9,3 +9,7 @@ project information, data and code. /Jonathan P
 the probability for a specific temperature is given. /Jonathan P
 
 2019-11-07: Final update of "tempOnDay". /Jonathan P
+
+2019-11-10: Added Andreas code. 
+
+2019-11-14: Added Martins code and accepted Jonathan W pull request. 

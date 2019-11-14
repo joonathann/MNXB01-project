@@ -29,6 +29,10 @@ class tempTrender {
 		// Andreas - Function that gives the mean temp and a histogram for the temperature for a given date. 
 		void MeanTempAndTempOnDate(int yearToCalculate, int monthToCalculate, int dayToCalculate);
 		
+		// Martin
+		int TempFile();
+		int MinMax();
+		
 };
 
 #endif

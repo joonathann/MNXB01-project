@@ -22,4 +22,6 @@ void project() {
 	cout << endl << endl << "MeanTempAndTempOnDate:" << endl << endl;
 	t.MeanTempAndTempOnDate(1977, 7, 7);
 	
+	cout << endl << endl << "MinMax:" << endl << endl;
+	t.MinMax();
 }

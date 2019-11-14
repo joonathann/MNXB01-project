@@ -8,17 +8,75 @@
 #include <TF1.h>
 #include <TCanvas.h>
 #include <TLegend.h>
+#include <TGraph.h>
+#include <TMultiGraph.h>
 
 #include "tempTrender.h"
 
 using namespace std;
 
 tempTrender::tempTrender(string filePath) {
-	cout << "The user supplied " << filePath << " as the path to the data file." << endl;
+	cout << endl << "The user supplied " << filePath << " as the path to the data file." << endl;
 	dataFile=filePath;
 }
 
 tempTrender::~tempTrender() {}
+
+
+int tempTrender::TempFile() {
+
+	string helpString; // used for adding each line to a vector
+	vector <string> vecStrings; // vector that we will add each line to
+	
+	ifstream myFile(dataFile.c_str()); // open file
+	
+	// if and else statements for adding each line to vector
+	if(myFile.is_open()) {
+		cout << "Reading datafile..." << endl;
+		while(getline(myFile, helpString)) { 
+			vecStrings.push_back(helpString); 
+		}
+	}
+	else {
+		cout << "Error: not reading the file!" << endl;
+		return 1;
+	}
+	
+	myFile.close(); // closing the file
+	
+	// removing the first elements in the vector since they contain text and not data
+	vecStrings.erase(vecStrings.begin(), vecStrings.begin() + 12);
+	
+	// removing text in the first lines of data
+	for(int n=0; n < 12; n++) {
+		vecStrings[n] = vecStrings[n].substr(0, 25);
+	}
+	
+	// creating new file
+	ofstream tempFile("tempFile.txt");
+	cout << "Creating new file with only year, month, day and temperature..." << endl;
+	
+	// adding only date and temperature to the new textfile
+	int vs = vecStrings.size();
+	int stringLength = 0;
+	int endofstring = 0;
+	string date0;
+	string date1;
+	string date2;
+	string temp;
+	for(int i=0; i < vs; i++) {
+		stringLength = vecStrings[i].length();
+		endofstring = stringLength - 22;
+		date0 = vecStrings[i].substr(0, 4);
+		date1 = vecStrings[i].substr(5, 2);
+		date2 = vecStrings[i].substr(8, 2);
+		temp = vecStrings[i].substr(20, endofstring);
+		tempFile << date0 << " " << date1 << " " << date2 << " " << temp << endl;
+	}
+	
+	tempFile.close(); // closing file
+}
+
 
 // Jonathan - Function that gives a histogram for the temperature for a given day.
 int tempTrender::tempOnDay(int monthToCalculate, int dayToCalculate, double expTemp) {
@@ -245,8 +303,104 @@ void tempTrender::MeanTempAndTempOnDate(int yearToCalculate, int monthToCalculat
 	for(int m=0; m < vecTempSize; m++) {
 		histogram->Fill(vecTemp[m]);
 	}
-	TCanvas* canvas = new TCanvas();
+	
+	TCanvas* canvas = new TCanvas("MeanTempAndTempOnDate", "MeanTempAndTempOnDate");
 	histogram->Draw();
 	
 }
 
+
+// Martin 
+int tempTrender::MinMax(){
+	//defining all the variable we need
+	int YearCounter=1961;
+	int DesiredYear;
+	int YearNo;
+	int MonthNo;
+	int DayNo;
+	int MinimumMonth;
+	int MinimumDay;
+	int MaximumMonth;
+	int MaximumDay;
+	double Temperature;
+	double YearMin;
+	double YearMax;
+	//user enters specific year they wish to know min and max of
+	cout << "Enter the year you wish to know the minimum and maximum temperature of between 1961 and 2015: "<< endl;
+	cin >> DesiredYear;
+	int InternalYear=DesiredYear-1961;
+	ifstream File("tempFile.txt"); // open file
+	//define all the vectors we need
+	vector <double> Minvec;
+	vector <double> Maxvec;
+	vector <int> MinDay;
+	vector <int> MinMonth;
+	vector <int> MinYear;
+	vector <int> MaxDay;
+	vector <int> MaxMonth;
+	vector <int> MaxYear;
+	
+	//adds all temperatures (min and max) and dates to vectors
+	while(File >> YearNo >> MonthNo >> DayNo >> Temperature){
+		if(YearNo == YearCounter){
+			if(YearMin > Temperature){
+				YearMin = Temperature;
+				MinimumMonth = MonthNo;
+				MinimumDay = DayNo;
+			}
+			if(YearMax < Temperature){
+				YearMax = Temperature;
+				MaximumMonth = MonthNo;
+				MaximumDay = DayNo;
+			}
+		}
+		else {
+			//resets when new year comes, and adds things to vectors
+			YearCounter++;
+			
+			Minvec.push_back(YearMin);
+			Maxvec.push_back(YearMax);
+			
+			MinMonth.push_back(MinimumMonth);
+			MinDay.push_back(MinimumDay);
+			
+			MaxMonth.push_back(MaximumMonth);
+			MaxDay.push_back(MaximumDay);
+			
+			YearMin=0;
+			YearMax=0;
+		}
+	}
+	//output for speccific year
+	cout << "The minimum temperature during the year "<< DesiredYear << " was: " << Minvec[InternalYear] << " which happnened on " << MinDay[InternalYear] << "/" << MinMonth[InternalYear] << endl
+	<<  "The maximum temperature during the year "<< DesiredYear << " was: " << Maxvec[InternalYear] << " which happnened on " << MaxDay[InternalYear] << "/" << MaxMonth[InternalYear] << endl;
+	
+	const int NoYears=2015;
+	double MinList[NoYears];
+	double MaxList[NoYears];
+	double YearList[NoYears];
+	//converts vectors to lists for graphing purposes
+	for (int i=0; i<NoYears; i++){
+		MinList[i]=Minvec[i];
+		MaxList[i]=Maxvec[i];
+		YearList[i]=i+1961;
+	}
+	//graphing the data that was produced
+	TGraph* MinGraph = new TGraph(54, YearList, MinList);
+	MinGraph -> SetLineColor(4);
+	MinGraph -> SetLineWidth(2);
+	
+	TGraph* MaxGraph = new TGraph(54, YearList, MaxList);
+	MaxGraph -> SetLineColor(2);
+	MaxGraph -> SetLineWidth(2);
+
+	TMultiGraph *MinMaxGraph = new TMultiGraph();
+	MinMaxGraph -> Add(MinGraph);
+	MinMaxGraph -> Add(MaxGraph);
+	MinMaxGraph -> SetTitle("Minimum and Maximum Temperature per year from 1961 to 2015; Year; Temperature( #circC)");
+	TCanvas* canvas = new TCanvas("MinMax", "MinMax");
+	MinMaxGraph -> Draw("A");
+	
+	File.close(); // closing file
+	return 0;
+}
